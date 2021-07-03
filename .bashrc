@@ -1,4 +1,4 @@
-source ~/.bashrc_orig
+source ~/.bashrc
 
 alias ll="ls -l"
 alias la="ls -a"

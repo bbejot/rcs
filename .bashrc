@@ -1,5 +1,3 @@
-source ~/.bashrc
-
 alias ll="ls -l"
 alias la="ls -a"
 alias l1="ls -1"
@@ -11,3 +9,5 @@ else
     PS1="[\033[94m\w\033[0m]\$ "
 fi
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+source $SCRIPT_DIR/.bashrc_overrides

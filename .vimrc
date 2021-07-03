@@ -9,7 +9,7 @@ set number
 set relativenumber
 
 " not sure if I like this yet
-set list  " shows end-of-line characters
+"set list  " shows end-of-line characters
 
 nnoremap <tab>c :tabnew<cr>
 nnoremap <tab>x :-tabnew<cr>

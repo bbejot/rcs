@@ -1,29 +1,33 @@
 # don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
 HISTCONTROL=ignoreboth
-
 # append to the history file, don't overwrite it
 shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTSIZE=1000
 HISTFILESIZE=2000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
+
+HAVE_COLORS=no
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
+    case "$TERM" in
+        xterm-color|*-256color) HAVE_COLORS=yes;;
+    esac
+    HAVE_COLORS=yes
 fi
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
+if [ "$HAVE_COLORS" == "yes" ]; then
+    COLOR_FLAG="--color=auto"
+fi
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# enable programmable completion features
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion
@@ -32,26 +36,43 @@ if ! shopt -oq posix; then
   fi
 fi
 
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+function append-path {
+  item=$1
+  if [[ ":${PATH}:" =~ ":${item}:" ]]; then
+    return
+  fi
+  export PATH="${PATH:+${PATH}:}${item}"
+}
+
+function prepend-path {
+  item=$1
+  if [[ ":${PATH}:" =~ ":${item}:" ]]; then
+    return
+  fi
+  export PATH="${item}${PATH:+:${PATH}}"
+}
+
+prepend-path "$HOME/bin"
+prepend-path "$HOME/.local/bin"
+
+alias grep="grep $COLOR_FLAG"
+alias ll="ls -al $COLOR_FLAG"
+alias la="ls -a $COLOR_FLAG"
+alias l1="ls -1 $COLOR_FLAG"
 
 if [ "$USER" == "root" ]; then
     usermark="#"
 else
     usermark="\$"
 fi
-color_prompt=no
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
-esac
-if [ "$color_prompt" == "yes" ]; then
+
+if [ "$HAVE_COLORS" == "yes" ]; then
   PS1="[\[\033[94m\]\w\[\033[0m\]]${usermark} "
 else
   PS1="[\w]${usermark} "
 fi
 
-export PATH="${PATH:+${PATH}:}${HOME}/workspace/bin"
+append-path "${HOME}/workspace/bin"
 
 alias gow="cd $HOME/workspace"
 
@@ -74,11 +95,14 @@ function col {
 
 export TMUX_COLOR=green
 
-if [ -e $HOME/.pyenv ]; then
-  export PYENV_ROOT="$HOME/.pyenv"
-  [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
+export CARGO_ROOT="$HOME/.cargo"
+if [ -e $CARGO_ROOT/env ]; then
+  . "$CARGO_ROOT/env"
 fi
 
-. "$HOME/.cargo/env"
+export PYENV_ROOT="$HOME/.pyenv"
+if [[ -d $PYENV_ROOT/bin ]]; then
+  prepend-path "$PYENV_ROOT/bin"
+fi
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"

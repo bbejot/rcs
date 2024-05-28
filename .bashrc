@@ -60,6 +60,14 @@ alias ll="ls -al $COLOR_FLAG"
 alias la="ls -a $COLOR_FLAG"
 alias l1="ls -1 $COLOR_FLAG"
 
+if [ "$HOSTNAME" == "ip-172-31-0-74.us-east-2.compute.internal" ]; then
+  machine="ec2"
+elif [ "$HOSTNAME" == "DESKTOP-APB1VEQ" ]; then
+  machine="desktop"
+else
+  machine="unknown"
+fi
+
 if [ "$USER" == "root" ]; then
     usermark="#"
 else
@@ -67,9 +75,9 @@ else
 fi
 
 if [ "$HAVE_COLORS" == "yes" ]; then
-  PS1="[\[\033[94m\]\w\[\033[0m\]]${usermark} "
+  PS1="[${machine} \[\033[94m\]\w\[\033[0m\]]${usermark} "
 else
-  PS1="[\w]${usermark} "
+  PS1="[${machine} \w]${usermark} "
 fi
 
 append-path "${HOME}/workspace/bin"

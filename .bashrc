@@ -114,3 +114,6 @@ if [[ -d $PYENV_ROOT/bin ]]; then
 fi
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
+
+export GO_ROOT="/usr/local/go"
+append-path "${GO_ROOT}/bin"

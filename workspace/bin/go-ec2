@@ -1,0 +1,3 @@
+#!/bin/bash
+#ssh -v -i /home/bbejot/workspace/aws/brent-key-pair-1.pem ec2-user@18.222.44.144
+ssh -v -i /home/bbejot/workspace/aws/brent-key-pair-1.pem ec2-user@go.makerfarious.com

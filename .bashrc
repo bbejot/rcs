@@ -88,6 +88,7 @@ append_path "${HOME}/workspace/bin"
 
 alias gow="cd $HOME/workspace"
 alias gotmp="cd $HOME/workspace/tmp"
+alias gorcs="cd $HOME/rcs"
 
 alias d.="du -h --max-depth 1 ."
 

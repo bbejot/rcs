@@ -5,6 +5,8 @@ shopt -s histappend
 HISTSIZE=1000
 HISTFILESIZE=2000
 
+set -o emacs
+set -o posix
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
@@ -36,7 +38,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
-function append-path {
+function append_path {
   item=$1
   if [[ ":${PATH}:" =~ ":${item}:" ]]; then
     return
@@ -44,7 +46,7 @@ function append-path {
   export PATH="${PATH:+${PATH}:}${item}"
 }
 
-function prepend-path {
+function prepend_path {
   item=$1
   if [[ ":${PATH}:" =~ ":${item}:" ]]; then
     return
@@ -52,8 +54,8 @@ function prepend-path {
   export PATH="${item}${PATH:+:${PATH}}"
 }
 
-prepend-path "$HOME/bin"
-prepend-path "$HOME/.local/bin"
+prepend_path "$HOME/bin"
+prepend_path "$HOME/.local/bin"
 
 alias grep="grep $COLOR_FLAG"
 alias ll="ls -al $COLOR_FLAG"
@@ -82,9 +84,12 @@ else
   PS1="[${machine} \w]${usermark} "
 fi
 
-append-path "${HOME}/workspace/bin"
+append_path "${HOME}/workspace/bin"
 
 alias gow="cd $HOME/workspace"
+alias gotmp="cd $HOME/workspace/tmp"
+
+alias d.="du -h --max-depth 1 ."
 
 alias cd.="cd .."
 alias cd..="cd ../.."
@@ -112,10 +117,20 @@ fi
 
 export PYENV_ROOT="$HOME/.pyenv"
 if [[ -d $PYENV_ROOT/bin ]]; then
-  prepend-path "$PYENV_ROOT/bin"
+  prepend_path "$PYENV_ROOT/bin"
 fi
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
 export GO_ROOT="/usr/local/go"
-append-path "${GO_ROOT}/bin"
+append_path "${GO_ROOT}/bin"
+
+export juke_prod="bot.0p71x.com"
+alias go-juke-prod="ssh juke@$juke_prod -p 8122"
+# boo on defrost cram
+alias go-juke-prod-bbejot="ssh bbejot@$juke_prod -p 8122"
+# H..22
+
+export rpi_ip=172.16.0.201
+alias go-rpi="ssh bxb@$rpi_ip"
+

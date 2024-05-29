@@ -12,6 +12,7 @@ set hlsearch
 set backspace=indent,eol,start
 
 filetype plugin indent on
+autocmd Filetype python setlocal smarttab tabstop=2 expandtab softtabstop=2 shiftwidth=2 autoindent
 retab
 
 set visualbell

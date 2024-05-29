@@ -64,6 +64,8 @@ if [ "$HOSTNAME" == "ip-172-31-0-74.us-east-2.compute.internal" ]; then
   machine="ec2"
 elif [ "$HOSTNAME" == "DESKTOP-APB1VEQ" ]; then
   machine="desktop"
+elif [ "$HOSTNAME" == "LAPTOP-BGO3JQ1U" ]; then
+  machine="laptop"
 else
   machine="unknown"
 fi
